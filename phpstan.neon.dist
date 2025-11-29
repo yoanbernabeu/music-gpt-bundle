@@ -1,0 +1,13 @@
+parameters:
+    level: 8
+    paths:
+        - src
+        - tests
+    ignoreErrors:
+        -
+            message: '#PHPDoc tag @var for variable \$rootNode contains generic class .* but does not specify its types#'
+            path: src/MusicGptBundle.php
+        -
+            message: '#Method .+::sendRequest\(\) should return T of .+ResponseInterface but returns .+ResponseInterface#'
+            path: src/Service/HttpClient.php
+
