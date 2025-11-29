@@ -82,4 +82,3 @@ class TextToSpeechRequest extends AbstractRequest
         return $data;
     }
 }
-

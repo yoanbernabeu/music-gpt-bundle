@@ -151,4 +151,3 @@ class ExtractionRequestTest extends TestCase
         $this->assertContains('snare_drum', $array['stems']);
     }
 }
-

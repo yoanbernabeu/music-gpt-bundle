@@ -25,4 +25,3 @@ class ExtractionService implements ExtractionServiceInterface
         return $this->httpClient->sendRequest($request, ExtractionResponse::class);
     }
 }
-

@@ -28,4 +28,3 @@ interface VoiceServiceInterface
      */
     public function getAllVoices(int $limit = 20, int $page = 0): VoicesResponse;
 }
-

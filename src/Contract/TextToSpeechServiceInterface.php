@@ -22,4 +22,3 @@ interface TextToSpeechServiceInterface
      */
     public function createTextToSpeech(TextToSpeechRequest $request): TextToSpeechResponse;
 }
-

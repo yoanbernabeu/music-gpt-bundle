@@ -165,8 +165,8 @@ class TextToSpeechServiceTest extends TestCase
 
     public function testCreateTextToSpeechWithLongText(): void
     {
-        $longText = 'When I think of superheroes I think of super humans. I think of Superman, Wolverine and Wonder Woman. ' .
-                   'Usually they have a cape, or a mask to hide their face just in case. They have X-ray vision and super-human strength. ' .
+        $longText = 'When I think of superheroes I think of super humans. I think of Superman, Wolverine and Wonder Woman. '.
+                   'Usually they have a cape, or a mask to hide their face just in case. They have X-ray vision and super-human strength. '.
                    'Some can even breathe in outer space.';
 
         $expectedData = [
@@ -199,4 +199,3 @@ class TextToSpeechServiceTest extends TestCase
         $this->assertSame(1.5, $response->getCreditEstimate());
     }
 }
-

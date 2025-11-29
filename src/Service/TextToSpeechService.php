@@ -25,4 +25,3 @@ class TextToSpeechService implements TextToSpeechServiceInterface
         return $this->httpClient->sendRequest($request, TextToSpeechResponse::class);
     }
 }
-

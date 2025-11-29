@@ -223,4 +223,3 @@ class ExtractionServiceTest extends TestCase
         $this->assertSame(4.5, $response->getCreditEstimate());
     }
 }
-

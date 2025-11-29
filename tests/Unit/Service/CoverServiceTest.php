@@ -158,4 +158,3 @@ class CoverServiceTest extends TestCase
         $service->createCover($request);
     }
 }
-

@@ -83,4 +83,3 @@ class TextToSpeechResponseTest extends TestCase
         $this->assertSame(0.68, $response->getCreditEstimate());
     }
 }
-

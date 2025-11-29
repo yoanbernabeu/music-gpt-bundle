@@ -22,4 +22,3 @@ interface MusicAIServiceInterface
      */
     public function generate(MusicAIRequest $request): MusicAIResponse;
 }
-

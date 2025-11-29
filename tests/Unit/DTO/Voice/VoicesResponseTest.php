@@ -143,4 +143,3 @@ class VoicesResponseTest extends TestCase
         $this->assertSame(0, $response->getTotal());
     }
 }
-

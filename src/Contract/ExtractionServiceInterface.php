@@ -22,4 +22,3 @@ interface ExtractionServiceInterface
      */
     public function extractStems(ExtractionRequest $request): ExtractionResponse;
 }
-

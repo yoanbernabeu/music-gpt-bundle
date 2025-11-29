@@ -83,4 +83,3 @@ class ExtractionResponseTest extends TestCase
         $this->assertSame(3.75, $response->getCreditEstimate());
     }
 }
-

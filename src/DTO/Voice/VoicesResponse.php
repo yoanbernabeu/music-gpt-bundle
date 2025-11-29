@@ -82,4 +82,3 @@ class VoicesResponse extends AbstractResponse
         );
     }
 }
-

@@ -109,7 +109,7 @@ class TextToSpeechRequestTest extends TestCase
         );
 
         $array = $request->toArray();
-        
+
         // Both should be included if both are provided
         $this->assertArrayHasKey('voice_id', $array);
         $this->assertArrayHasKey('sample_audio_url', $array);
@@ -120,7 +120,7 @@ class TextToSpeechRequestTest extends TestCase
     public function testWithLongText(): void
     {
         $longText = 'When I think of superheroes I think of super humans. I think of Superman, Wolverine and Wonder Woman. Usually they have a cape, or a mask to hide their face just in case.';
-        
+
         $request = new TextToSpeechRequest(
             text: $longText,
             gender: 'male',
@@ -130,4 +130,3 @@ class TextToSpeechRequestTest extends TestCase
         $this->assertSame($longText, $request->getText());
     }
 }
-

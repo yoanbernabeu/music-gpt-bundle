@@ -97,4 +97,3 @@ class ExtractionRequest extends AbstractRequest
         return $data;
     }
 }
-

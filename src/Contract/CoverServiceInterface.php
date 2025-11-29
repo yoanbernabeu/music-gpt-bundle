@@ -22,4 +22,3 @@ interface CoverServiceInterface
      */
     public function createCover(CoverRequest $request): CoverResponse;
 }
-

@@ -87,4 +87,3 @@ class CoverRequest extends AbstractRequest
         return $data;
     }
 }
-

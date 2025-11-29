@@ -48,4 +48,3 @@ class VoiceService implements VoiceServiceInterface
         return VoicesResponse::fromArray($data);
     }
 }
-

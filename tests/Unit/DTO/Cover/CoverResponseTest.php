@@ -83,4 +83,3 @@ class CoverResponseTest extends TestCase
         $this->assertSame(2.75, $response->getCreditEstimate());
     }
 }
-
