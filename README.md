@@ -14,6 +14,9 @@ A Symfony bundle for integrating [Music GPT API](https://musicgpt.com/api) into 
 
 - 🎵 **Music AI** - Generate custom music from text prompts
 - 🎤 **Cover Songs** - Transform audio with AI voice models
+- 🗣️ **Text To Speech** - Convert text to realistic speech with voice models
+- 🎼 **Audio Extraction** - Extract stems (vocals, drums, bass, etc.) from audio
+- 🎙️ **Voice Management** - Search and list AI voices
 - 🔍 **Conversion Tracking** - Check status and retrieve results
 - 🚀 **Type-Safe** - Full PHP 8.4 type safety with DTOs and Enums
 - 📦 **Easy to Use** - Simple, intuitive API
@@ -147,6 +150,219 @@ class CoverController
 
 **Note:** Provide either `audioUrl` OR `audioFile`, not both.
 
+### Generate Text To Speech
+
+```php
+use YoanBernabeu\MusicGptBundle\Contract\TextToSpeechServiceInterface;
+use YoanBernabeu\MusicGptBundle\DTO\TextToSpeech\TextToSpeechRequest;
+
+class TextToSpeechController
+{
+    public function __construct(
+        private readonly TextToSpeechServiceInterface $textToSpeech
+    ) {}
+
+    public function create(): void
+    {
+        // Simple text to speech with voice ID
+        $request = new TextToSpeechRequest(
+            text: 'Hello world, this is a test of the text to speech feature.',
+            gender: 'male',
+            voiceId: 'Drake'
+        );
+
+        $response = $this->textToSpeech->createTextToSpeech($request);
+
+        echo "Task ID: {$response->getTaskId()}\n";
+        echo "ETA: {$response->getEta()} seconds\n";
+    }
+
+    public function createWithSampleAudio(): void
+    {
+        // Using a sample audio URL for voice cloning
+        $request = new TextToSpeechRequest(
+            text: 'The character Sherlock Holmes first appeared in print in 1887.',
+            gender: 'female',
+            sampleAudioUrl: 'https://example.com/voice-sample.mp3'
+        );
+
+        $response = $this->textToSpeech->createTextToSpeech($request);
+    }
+
+    public function createWithWebhook(): void
+    {
+        // With webhook for async notification
+        $request = new TextToSpeechRequest(
+            text: 'When I think of superheroes I think of super humans.',
+            gender: 'male',
+            voiceId: 'Drake',
+            webhookUrl: 'https://example.com/webhook'
+        );
+
+        $response = $this->textToSpeech->createTextToSpeech($request);
+    }
+}
+```
+
+**Available Parameters:**
+- `text` (required) - Text content to convert to speech
+- `gender` (required) - Voice gender: "male" or "female"
+- `voiceId` (optional) - Voice model ID (e.g., "Drake", "Adele")
+- `sampleAudioUrl` (optional) - URL of voice sample for cloning
+- `webhookUrl` (optional) - Callback URL for async notifications
+
+**Note:** Priority is given to `sampleAudioUrl`, then `voiceId`, then `gender`.
+
+### Extract Audio Stems
+
+```php
+use YoanBernabeu\MusicGptBundle\Contract\ExtractionServiceInterface;
+use YoanBernabeu\MusicGptBundle\DTO\Extraction\ExtractionRequest;
+
+class ExtractionController
+{
+    public function __construct(
+        private readonly ExtractionServiceInterface $extraction
+    ) {}
+
+    public function extractVocals(): void
+    {
+        // Extract vocals from a song
+        $request = new ExtractionRequest(
+            audioUrl: 'https://example.com/song.mp3',
+            stems: ['vocals', 'instrumental']
+        );
+
+        $response = $this->extraction->extractStems($request);
+
+        echo "Task ID: {$response->getTaskId()}\n";
+        echo "ETA: {$response->getEta()} seconds\n";
+    }
+
+    public function extractMultipleStems(): void
+    {
+        // Extract multiple stems from a song
+        $request = new ExtractionRequest(
+            audioUrl: 'https://example.com/song.mp3',
+            stems: ['vocals', 'drums', 'bass', 'guitar', 'piano']
+        );
+
+        $response = $this->extraction->extractStems($request);
+    }
+
+    public function extractWithPreprocessing(): void
+    {
+        // Extract with audio cleanup
+        $request = new ExtractionRequest(
+            audioFile: '/path/to/audio.wav',
+            stems: ['vocals'],
+            preprocessingOptions: ['Denoise', 'Dereverb']
+        );
+
+        $response = $this->extraction->extractStems($request);
+    }
+
+    public function cleanupAudio(): void
+    {
+        // Only apply preprocessing without extraction
+        $request = new ExtractionRequest(
+            audioUrl: 'https://example.com/noisy-audio.mp3',
+            preprocessingOptions: ['Denoise', 'Deecho', 'Dereverb']
+        );
+
+        $response = $this->extraction->extractStems($request);
+    }
+}
+```
+
+**Available Stems:**
+- Basic: `vocals`, `instrumental`
+- Vocal types: `male_vocal`, `female_vocal`, `lead_vocal`, `back_vocal`
+- Instruments: `bass`, `drums`, `guitar`, `piano`, `keys`, `strings`, `winds`
+- Guitar types: `rhythm_guitar`, `solo_guitar`, `acoustic_guitar`, `electric_guitar`
+- Drum components: `kick_drum`, `snare_drum`, `toms`, `hi_hat`, `ride`, `crash`
+
+**Preprocessing Options:**
+- `Denoise` - Remove background noise
+- `Deecho` - Remove echo effects
+- `Dereverb` - Remove reverb effects
+
+**Note:** Provide either `audioUrl` OR `audioFile`, not both.
+
+### Search and List Voices
+
+```php
+use YoanBernabeu\MusicGptBundle\Contract\VoiceServiceInterface;
+
+class VoiceController
+{
+    public function __construct(
+        private readonly VoiceServiceInterface $voice
+    ) {}
+
+    public function searchVoices(): void
+    {
+        // Search for voices by name
+        $response = $this->voice->searchVoices('Drake');
+
+        echo "Found {$response->getTotal()} voices\n";
+        
+        foreach ($response->getVoices() as $voice) {
+            echo "ID: {$voice->getVoiceId()} - Name: {$voice->getVoiceName()}\n";
+        }
+    }
+
+    public function searchWithPagination(): void
+    {
+        // Search with pagination
+        $response = $this->voice->searchVoices(
+            query: 'Taylor',
+            limit: 50,
+            page: 0
+        );
+
+        echo "Page {$response->getPage()} of " . 
+             ceil($response->getTotal() / $response->getLimit()) . "\n";
+    }
+
+    public function listAllVoices(): void
+    {
+        // Get all available voices
+        $response = $this->voice->getAllVoices(limit: 100, page: 0);
+
+        echo "Total voices available: {$response->getTotal()}\n";
+        echo "Showing: " . count($response->getVoices()) . " voices\n";
+    }
+
+    public function browseVoices(): void
+    {
+        // Browse through all voices with pagination
+        $page = 0;
+        $limit = 20;
+
+        do {
+            $response = $this->voice->getAllVoices($limit, $page);
+            
+            foreach ($response->getVoices() as $voice) {
+                echo "{$voice->getVoiceName()}\n";
+            }
+            
+            $page++;
+        } while (($page * $limit) < $response->getTotal());
+    }
+}
+```
+
+**Available Methods:**
+- `searchVoices(string $query, int $limit = 20, int $page = 0)` - Search voices by name
+- `getAllVoices(int $limit = 20, int $page = 0)` - Get all available voices
+
+**Response Data:**
+- `getVoices()` - Array of VoiceInfo objects
+- `getTotal()` - Total number of voices available
+- `getLimit()` - Results per page
+- `getPage()` - Current page number
+
 ### Track Conversion Status
 
 ```php
@@ -190,6 +406,36 @@ class ConversionController
             echo "Audio: {$details->getAudioUrl()}\n";
             echo "Video: {$details->getVideoUrl()}\n";
             echo "Cover: {$details->getImageUrl()}\n";
+        }
+    }
+
+    public function checkTextToSpeech(): void
+    {
+        // Check Text To Speech conversion
+        $details = $this->conversion->getByTaskId(
+            taskId: 'task_tts_123',
+            conversionType: ConversionType::TEXT_TO_SPEECH
+        );
+
+        if ($details->isCompleted()) {
+            echo "✅ Speech generated!\n";
+            echo "Audio (MP3): {$details->getAudioUrl()}\n";
+            echo "Audio (WAV): {$details->getAudioUrlWav()}\n";
+        }
+    }
+
+    public function checkExtraction(): void
+    {
+        // Check Extraction conversion
+        $details = $this->conversion->getByTaskId(
+            taskId: 'task_extract_456',
+            conversionType: ConversionType::EXTRACTION
+        );
+
+        if ($details->isCompleted()) {
+            echo "✅ Stems extracted!\n";
+            echo "Vocals: {$details->getVocalsUrl()}\n";
+            echo "Instrumental: {$details->getInstrumentalUrl()}\n";
         }
     }
 }
@@ -284,10 +530,19 @@ See [official rate limits documentation](https://docs.musicgpt.com/api-documenta
 
 ## API Documentation
 
+### Main Documentation
 - [Music GPT API Docs](https://docs.musicgpt.com)
+
+### Conversion Endpoints
 - [Music AI Endpoint](https://docs.musicgpt.com/api-documentation/conversions/musicai)
 - [Cover Endpoint](https://docs.musicgpt.com/api-documentation/conversions/cover)
+- [Text To Speech Endpoint](https://docs.musicgpt.com/api-documentation/conversions/texttospeech)
+- [Extraction Endpoint](https://docs.musicgpt.com/api-documentation/endpoint/extraction)
+
+### Helper Endpoints
 - [Get by ID Endpoint](https://docs.musicgpt.com/api-documentation/endpoint/getById)
+- [Search Voices](https://docs.musicgpt.com/api-documentation/endpoint/searchVoices)
+- [Get All Voices](https://docs.musicgpt.com/api-documentation/endpoint/getAllVoices)
 
 ## Development
 

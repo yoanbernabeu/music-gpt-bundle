@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace YoanBernabeu\MusicGptBundle\DTO\Cover;
+namespace YoanBernabeu\MusicGptBundle\DTO\TextToSpeech;
 
 use YoanBernabeu\MusicGptBundle\DTO\AbstractResponse;
 
 /**
- * Response DTO for Cover Song generation.
+ * Response DTO for Text To Speech generation.
  *
- * @see https://docs.musicgpt.com/api-documentation/conversions/cover
+ * @see https://docs.musicgpt.com/api-documentation/conversions/texttospeech
  */
-class CoverResponse extends AbstractResponse
+class TextToSpeechResponse extends AbstractResponse
 {
     public function __construct(
         private readonly bool $success,

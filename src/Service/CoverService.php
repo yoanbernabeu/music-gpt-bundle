@@ -25,3 +25,4 @@ class CoverService implements CoverServiceInterface
         return $this->httpClient->sendRequest($request, CoverResponse::class);
     }
 }
+

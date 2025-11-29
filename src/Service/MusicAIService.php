@@ -25,3 +25,4 @@ class MusicAIService implements MusicAIServiceInterface
         return $this->httpClient->sendRequest($request, MusicAIResponse::class);
     }
 }
+

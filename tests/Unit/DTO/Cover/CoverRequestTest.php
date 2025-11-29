@@ -124,3 +124,4 @@ class CoverRequestTest extends TestCase
         $this->assertArrayNotHasKey('audio_url', $array);
     }
 }
+

@@ -13,4 +13,6 @@ enum ConversionType: string
 {
     case MUSIC_AI = 'MUSIC_AI';
     case COVER = 'COVER';
+    case TEXT_TO_SPEECH = 'TEXT_TO_SPEECH';
+    case EXTRACTION = 'EXTRACTION';
 }

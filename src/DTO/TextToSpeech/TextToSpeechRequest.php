@@ -2,34 +2,34 @@
 
 declare(strict_types=1);
 
-namespace YoanBernabeu\MusicGptBundle\DTO\Cover;
+namespace YoanBernabeu\MusicGptBundle\DTO\TextToSpeech;
 
 use YoanBernabeu\MusicGptBundle\DTO\AbstractRequest;
 
 /**
- * Request DTO for Cover Song generation.
+ * Request DTO for Text To Speech generation.
  *
- * @see https://docs.musicgpt.com/api-documentation/conversions/cover
+ * @see https://docs.musicgpt.com/api-documentation/conversions/texttospeech
  */
-class CoverRequest extends AbstractRequest
+class TextToSpeechRequest extends AbstractRequest
 {
     public function __construct(
-        private readonly ?string $audioUrl = null,
-        private readonly ?string $audioFile = null,
+        private readonly string $text,
+        private readonly string $gender,
         private readonly ?string $voiceId = null,
-        private readonly int $pitch = 0,
+        private readonly ?string $sampleAudioUrl = null,
         private readonly ?string $webhookUrl = null,
     ) {
     }
 
-    public function getAudioUrl(): ?string
+    public function getText(): string
     {
-        return $this->audioUrl;
+        return $this->text;
     }
 
-    public function getAudioFile(): ?string
+    public function getGender(): string
     {
-        return $this->audioFile;
+        return $this->gender;
     }
 
     public function getVoiceId(): ?string
@@ -37,9 +37,9 @@ class CoverRequest extends AbstractRequest
         return $this->voiceId;
     }
 
-    public function getPitch(): int
+    public function getSampleAudioUrl(): ?string
     {
-        return $this->pitch;
+        return $this->sampleAudioUrl;
     }
 
     public function getWebhookUrl(): ?string
@@ -49,7 +49,7 @@ class CoverRequest extends AbstractRequest
 
     public function getEndpoint(): string
     {
-        return '/Cover';
+        return '/TextToSpeech';
     }
 
     public function getMethod(): string
@@ -62,22 +62,17 @@ class CoverRequest extends AbstractRequest
      */
     public function toArray(): array
     {
-        $data = [];
-
-        if (null !== $this->audioUrl) {
-            $data['audio_url'] = $this->audioUrl;
-        }
-
-        if (null !== $this->audioFile) {
-            $data['audio_file'] = $this->audioFile;
-        }
+        $data = [
+            'text' => $this->text,
+            'gender' => $this->gender,
+        ];
 
         if (null !== $this->voiceId) {
             $data['voice_id'] = $this->voiceId;
         }
 
-        if (0 !== $this->pitch) {
-            $data['pitch'] = $this->pitch;
+        if (null !== $this->sampleAudioUrl) {
+            $data['sample_audio_url'] = $this->sampleAudioUrl;
         }
 
         if (null !== $this->webhookUrl) {

@@ -2,22 +2,26 @@
 
 declare(strict_types=1);
 
-namespace YoanBernabeu\MusicGptBundle\DTO\Cover;
+namespace YoanBernabeu\MusicGptBundle\DTO\Extraction;
 
 use YoanBernabeu\MusicGptBundle\DTO\AbstractRequest;
 
 /**
- * Request DTO for Cover Song generation.
+ * Request DTO for Audio Extraction.
  *
- * @see https://docs.musicgpt.com/api-documentation/conversions/cover
+ * @see https://docs.musicgpt.com/api-documentation/endpoint/extraction
  */
-class CoverRequest extends AbstractRequest
+class ExtractionRequest extends AbstractRequest
 {
+    /**
+     * @param array<string> $stems
+     * @param array<string> $preprocessingOptions
+     */
     public function __construct(
         private readonly ?string $audioUrl = null,
         private readonly ?string $audioFile = null,
-        private readonly ?string $voiceId = null,
-        private readonly int $pitch = 0,
+        private readonly array $stems = [],
+        private readonly array $preprocessingOptions = [],
         private readonly ?string $webhookUrl = null,
     ) {
     }
@@ -32,14 +36,20 @@ class CoverRequest extends AbstractRequest
         return $this->audioFile;
     }
 
-    public function getVoiceId(): ?string
+    /**
+     * @return array<string>
+     */
+    public function getStems(): array
     {
-        return $this->voiceId;
+        return $this->stems;
     }
 
-    public function getPitch(): int
+    /**
+     * @return array<string>
+     */
+    public function getPreprocessingOptions(): array
     {
-        return $this->pitch;
+        return $this->preprocessingOptions;
     }
 
     public function getWebhookUrl(): ?string
@@ -49,7 +59,7 @@ class CoverRequest extends AbstractRequest
 
     public function getEndpoint(): string
     {
-        return '/Cover';
+        return '/Extraction';
     }
 
     public function getMethod(): string
@@ -72,12 +82,12 @@ class CoverRequest extends AbstractRequest
             $data['audio_file'] = $this->audioFile;
         }
 
-        if (null !== $this->voiceId) {
-            $data['voice_id'] = $this->voiceId;
+        if ([] !== $this->stems) {
+            $data['stems'] = $this->stems;
         }
 
-        if (0 !== $this->pitch) {
-            $data['pitch'] = $this->pitch;
+        if ([] !== $this->preprocessingOptions) {
+            $data['preprocessing_options'] = $this->preprocessingOptions;
         }
 
         if (null !== $this->webhookUrl) {

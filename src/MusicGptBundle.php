@@ -14,11 +14,17 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 use YoanBernabeu\MusicGptBundle\Contract\ConversionServiceInterface;
 use YoanBernabeu\MusicGptBundle\Contract\CoverServiceInterface;
+use YoanBernabeu\MusicGptBundle\Contract\ExtractionServiceInterface;
 use YoanBernabeu\MusicGptBundle\Contract\MusicAIServiceInterface;
+use YoanBernabeu\MusicGptBundle\Contract\TextToSpeechServiceInterface;
+use YoanBernabeu\MusicGptBundle\Contract\VoiceServiceInterface;
 use YoanBernabeu\MusicGptBundle\Service\ConversionService;
 use YoanBernabeu\MusicGptBundle\Service\CoverService;
+use YoanBernabeu\MusicGptBundle\Service\ExtractionService;
 use YoanBernabeu\MusicGptBundle\Service\HttpClient;
 use YoanBernabeu\MusicGptBundle\Service\MusicAIService;
+use YoanBernabeu\MusicGptBundle\Service\TextToSpeechService;
+use YoanBernabeu\MusicGptBundle\Service\VoiceService;
 
 /**
  * Music GPT Bundle.
@@ -99,6 +105,33 @@ class MusicGptBundle extends AbstractBundle
             ->alias(CoverServiceInterface::class, CoverService::class)
                 ->public()
             ->alias('yoanbernabeu_music_gpt.cover', CoverServiceInterface::class)
+                ->public()
+
+            // Text To Speech Service
+            ->set(TextToSpeechService::class)
+                ->args([service(HttpClient::class)])
+                ->public()
+            ->alias(TextToSpeechServiceInterface::class, TextToSpeechService::class)
+                ->public()
+            ->alias('yoanbernabeu_music_gpt.text_to_speech', TextToSpeechServiceInterface::class)
+                ->public()
+
+            // Extraction Service
+            ->set(ExtractionService::class)
+                ->args([service(HttpClient::class)])
+                ->public()
+            ->alias(ExtractionServiceInterface::class, ExtractionService::class)
+                ->public()
+            ->alias('yoanbernabeu_music_gpt.extraction', ExtractionServiceInterface::class)
+                ->public()
+
+            // Voice Service (Helper for voice search and listing)
+            ->set(VoiceService::class)
+                ->args([service(HttpClient::class)])
+                ->public()
+            ->alias(VoiceServiceInterface::class, VoiceService::class)
+                ->public()
+            ->alias('yoanbernabeu_music_gpt.voice', VoiceServiceInterface::class)
                 ->public()
 
             // Conversion Service (Helper for retrieving conversion details)
